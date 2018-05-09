@@ -7,7 +7,7 @@ The webBudget docker image repository.
 #### To run
 
 ```
-docker run --name webbudget -itd -p 8443:8443 arthurgregorio/webbudget
+docker run --name webbudget -itd -p 8443:8443 arthurgregorio/web-budget-docker
 ```
 
 #### To see the logs 
