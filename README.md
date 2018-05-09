@@ -10,6 +10,8 @@ The webBudget docker image repository.
 docker run --name webbudget -itd -p 8443:8443 arthurgregorio/web-budget-docker
 ```
 
+And after that, in your prefered browser open the following URL: https://localhost:8443 and use the username as admin and password as admin.
+
 #### To see the logs 
 
 ```
