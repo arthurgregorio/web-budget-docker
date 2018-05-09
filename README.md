@@ -24,4 +24,4 @@ docker start/stop/restart webbudget
 
 #### References
 
-This image was made using by reference other two images, one from (Arun Gupta)[https://github.com/arun-gupta/docker-images/tree/master/wildfly-mysql-javaee7] and the other from (kaiwinter)[https://github.com/kaiwinter/wildfly10-mariadb]. Thanks for sharing!
+This image was made using by reference other two images, one from [Arun Gupta](https://github.com/arun-gupta/docker-images/tree/master/wildfly-mysql-javaee7) and the other from [kaiwinter](https://github.com/kaiwinter/wildfly10-mariadb). Thanks for sharing!
