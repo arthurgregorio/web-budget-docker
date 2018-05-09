@@ -1,0 +1,7 @@
+webbudget v2.3.1 on docker
+
+ # to run: run --name webbudget -itd -p 8443:8443 arthurgregorio/webbudget
+ # to see the logs: docker logs -f webbudget
+ # to stop: docker stop webbudget
+ # to start/restart: docker start webbudget
+ 
