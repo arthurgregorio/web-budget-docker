@@ -1,26 +1,14 @@
-FROM jboss/wildfly:10.1.0.Final
+FROM jboss/wildfly
 
 LABEL application=webBudget-v3.0.0-ALPHA
 LABEL maintainer=arthurshakal@gmail.com
 
 USER root
 
-ENV JAVA_VER  11
-ENV JAVA_HOME /opt/jdk-$JAVA_VER/
-
 RUN \
     yum update -y && \
-    yum install -y epel-release mariadb-server hostname net-tools pwgen wget
-
-RUN wget https://download.java.net/openjdk/jdk${JAVA_VER}/ri/openjdk-${JAVA_VER}+28_linux-x64_bin.tar.gz -O /opt/jdk.tar.gz
-RUN cd /opt; \
-    tar -xvf jdk.tar.gz; \
-    rm jdk.tar.gz
-
-RUN cd /opt/jdk-$JAVA_VER; \
-    alternatives --install /usr/bin/java java /opt/jdk-$JAVA_VER/bin/java 2
-
-RUN yum clean all && \
+    yum install -y epel-release mariadb-server hostname net-tools pwgen wget && \
+    yum clean all && \
     rm -rf /var/lib/mysql/*
 
 RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/org/mariadb/main
