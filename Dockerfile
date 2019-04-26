@@ -5,9 +5,16 @@ LABEL maintainer=arthurshakal@gmail.com
 
 USER root
 
+# do some fancy footwork to create a JAVA_HOME that's cross-architecture-safe
+RUN ln -svT "/usr/lib/jvm/java-11-openjdk-$(dpkg --print-architecture)" /docker-java-home
+ENV JAVA_HOME /docker-java-home
+
+ENV JAVA_VERSION 11.0.3
+ENV JAVA_DEBIAN_VERSION 11.0.3+1-1~bpo9+1
+
 RUN \
     yum update -y && \
-    yum install -y epel-release mariadb-server hostname net-tools pwgen wget && \
+    yum install -y epel-release mariadb-server hostname net-tools pwgen wget openjdk-11-jdk="$JAVA_DEBIAN_VERSION" &&  \
     yum clean all && \
     rm -rf /var/lib/mysql/*
 
