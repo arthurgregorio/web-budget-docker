@@ -6,7 +6,7 @@
 #########################################################
 function wait_for_db() {
   set +e
-  
+
   echo "Waiting for DB service..."
   while true; do
     if grep "ready for connections" $MARIADB_LOG; then
@@ -15,7 +15,7 @@ function wait_for_db() {
       echo "Still waiting for DB service..." && sleep 1
     fi
   done
-  
+
   set -e
 }
 
@@ -28,7 +28,7 @@ function terminate_db() {
   local pid=$(cat $VOLUME_HOME/mysql.pid)
   echo "Caught SIGTERM signal, shutting down DB..."
   kill -TERM $pid
-  
+
   while true; do
     if tail $MARIADB_LOG | grep -s -E "mysqld .+? ended" $MARIADB_LOG; then break; else sleep 0.5; fi
   done
@@ -50,7 +50,7 @@ function install_db() {
   else
     echo "=> Using an existing volume of MariaDB."
   fi
-  
+
   # Move previous error log (which might be there from previously running container
   # to different location. We do that to have error log from the currently running
   # container only.
@@ -81,10 +81,10 @@ function create_user() {
     echo "=> User '$MARIADB_USER' exists, updating its password to '$MARIADB_PASS'"
     mysql -uroot -e "SET PASSWORD FOR '$MARIADB_USER'@'%' = PASSWORD('$MARIADB_PASS')"
   fi;
-  
+
   mysql -uroot -e "GRANT USAGE ON *.* TO '$MARIADB_USER'@'%'"
   mysql -uroot -e "GRANT SELECT, EXECUTE, SHOW VIEW, ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, INDEX, INSERT, REFERENCES, TRIGGER, UPDATE  ON webbudget.* TO '$MARIADB_USER'@'%'"
-  
+
   echo "========================================================================"
   echo "    You can now connect to this MariaDB Server using:                   "
   echo "    mysql -u$MARIADB_USER -p$MARIADB_PASS -h<host>                      "
@@ -101,5 +101,5 @@ function show_db_status() {
 
 function create_db() {
   echo "Creating default databse..."
-  mysql -uroot -e "CREATE DATABASE webbudget /*!40100 COLLATE 'utf8_general_ci' */"
+  mysql -uroot -e "CREATE DATABASE IF NOT EXISTS webbudget /*!40100 COLLATE 'utf8_general_ci' */"
 }

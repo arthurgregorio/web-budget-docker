@@ -1,6 +1,6 @@
-FROM jboss/wildfly:10.1.0.Final
+FROM jboss/wildfly
 
-LABEL application=webBudget-v2.3.1
+LABEL application=webBudget-v3.0.0-ALPHA
 LABEL maintainer=arthurshakal@gmail.com
 
 USER root
@@ -21,7 +21,7 @@ RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
 
 COPY container-files/mariadb /
 COPY container-files/wildfly/run-wildfly.sh /
-COPY container-files/wildfly/wb-v2.3.1.war /opt/jboss/wildfly/standalone/deployments/
+COPY container-files/wildfly/wb-v3.0.0a.war /opt/jboss/wildfly/standalone/deployments/
 
 EXPOSE 3306 8443 9993
 
