@@ -1,35 +1,40 @@
-FROM jboss/wildfly
+FROM jboss/wildfly:16.0.0.Final
 
-LABEL application=webBudget-v3.0.0-ALPHA
-LABEL maintainer=arthurshakal@gmail.com
+LABEL author="Arthur Gregorio"
+LABEL email="arthurshakal@gmail.com"
+LABEL application="webBudget v3.0.0-RC1"
 
+# default environment vars for wildfly
+ENV WF_ADMIN_USER webbudget
+ENV WF_ADMIN_PASS webbudget
+
+# default environment vars for database
+ENV DB_HOST postgres
+ENV DB_PORT 5432
+ENV DB_NAME webbudget
+ENV DB_USER sa_webbudget
+ENV DB_PASS sa_webbudget
+
+# define the user to run commands below
 USER root
 
-RUN \
-    yum update -y && \
-    yum install -y epel-release mariadb-server hostname net-tools pwgen wget && \
-    yum clean all && \
-    rm -rf /var/lib/mysql/*
+# create the folder where postgres driver will be placed
+RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main
 
-RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/org/mariadb/main
-RUN wget https://downloads.mariadb.com/Connectors/java/connector-java-2.2.3/mariadb-java-client-2.2.3.jar -O /opt/jboss/wildfly/modules/system/layers/base/org/mariadb/main/mariadb-java-client-2.2.3.jar
+# copy postgres driver
+COPY files/module.xml /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main
+COPY files/postgresql-42.2.5.jar /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/
 
-COPY container-files/wildfly/standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
-COPY container-files/wildfly/module.xml /opt/jboss/wildfly/modules/system/layers/base/org/mariadb/main/
+# copy wildfly configuration
+COPY files/standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
 
-RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
+# copy application war file to deploy folder
+COPY files/web-budget-3.0.0-RC.war /opt/jboss/wildfly/standalone/deployments
 
-COPY container-files/mariadb /
-COPY container-files/wildfly/run-wildfly.sh /
-COPY container-files/wildfly/wb-v3.0.0a.war /opt/jboss/wildfly/standalone/deployments/
+# add wildfly admin user
+RUN /opt/jboss/wildfly/bin/add-user.sh ${WF_ADMIN_USER} ${WF_ADMIN_PASS} --silent
 
-EXPOSE 3306 8443 9993
+# expose https port for application and management
+EXPOSE 8443 9993
 
-WORKDIR "/"
-
-ENV MARIADB_PASS 'sa_webbudget'
-
-RUN chmod +x /run-maria.sh
-RUN chmod +x /run-wildfly.sh
-
-ENTRYPOINT ./run-maria.sh && ./run-wildfly.sh
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
