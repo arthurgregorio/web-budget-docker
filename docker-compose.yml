@@ -1,8 +1,9 @@
-version: '3'
+version: '3.5'
 
 services:
   postgres:
     image: postgres:11.2-alpine
+    container_name: webbudget_db
     ports: 
       - "5432:5432"
     restart: always
@@ -11,13 +12,22 @@ services:
       - POSTGRES_USER=sa_webbudget
       - POSTGRES_PASSWORD=sa_webbudget
       - POSTGRES_PORT=5432
+    networks:
+      - webbudget_network
   
   webbudget:
     image: arthurgregorio/web-budget-docker
+    container_name: webbudget_app
     ports:
       - "9993:9993"
       - "8443:8443"
     depends_on:
       - postgres
+    networks:
+      - webbudget_network
+  
+  networks:
+    webbudget_network:
+      name: webbudget
     
 
