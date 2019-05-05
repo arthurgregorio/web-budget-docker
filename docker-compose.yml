@@ -26,8 +26,8 @@ services:
     networks:
       - webbudget_network
   
-  networks:
-    webbudget_network:
-      name: webbudget
+networks:
+  webbudget_network:
+    name: webbudget
     
 
