@@ -6,7 +6,6 @@ services:
     container_name: webbudget_db
     ports: 
       - "5432:5432"
-    restart: always
     environment: 
       - POSTGRES_DB=webbudget
       - POSTGRES_USER=sa_webbudget
