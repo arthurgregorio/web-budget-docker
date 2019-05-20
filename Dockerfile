@@ -29,7 +29,7 @@ COPY files/postgresql-42.2.5.jar /opt/jboss/wildfly/modules/system/layers/base/o
 COPY files/standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
 
 # copy application war file to deploy folder
-COPY files/web-budget-3.0.0-RC.war /opt/jboss/wildfly/standalone/deployments
+COPY files/web-budget-3.0.0-RELEASE.war /opt/jboss/wildfly/standalone/deployments
 
 # add wildfly admin user
 RUN /opt/jboss/wildfly/bin/add-user.sh ${WF_ADMIN_USER} ${WF_ADMIN_PASS} --silent
