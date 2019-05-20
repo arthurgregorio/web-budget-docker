@@ -28,5 +28,3 @@ services:
 networks:
   webbudget_network:
     name: webbudget
-    
-
